@@ -17,7 +17,31 @@ const handleListen = () => {
 };
 
 const server = http.createServer(app);
-
 const wss = new WebSocket.Server({ server });
+
+//fake db
+const sockets = [];
+
+//socket은 서버와 브라우저 사이의 연결
+
+wss.on("connection", (socket) => {
+  sockets.push(socket);
+  socket["nickname"] = "Anon";
+  console.log("Connected to Browser 🐱‍🏍");
+  socket.on("close", () => console.log("Disconneted to Browser ✖"));
+  socket.on("message", (msg) => {
+    const message = JSON.parse(msg);
+    switch (message.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket.nickname}: ${message.payload}`)
+        );
+        break;
+      case "nickname":
+        socket["nickname"] = message.payload;
+        break;
+    }
+  });
+});
 
 server.listen(PORT, handleListen);

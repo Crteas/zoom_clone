@@ -10,5 +10,11 @@ html(lang="en")
         header
             h1 Welcome~
         main
-            h2 welcome to Clone
+            form#nick
+                input(type="text", placeholder="choose a nickname",required)
+                button save
+            ul
+            form#message
+                input(type="text", placeholder="Write a message",required)
+                button Send
         script(src="/public/js/app.js") 
