@@ -1,5 +1,5 @@
 import http from "http";
-import WebSocket from "ws";
+import SocketIo from "socket.io";
 import express from "express";
 
 const PORT = 9500;
@@ -16,9 +16,12 @@ const handleListen = () => {
   console.log(`http://localhost:${PORT}`);
 };
 
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const httpServer = http.createServer(app);
+const wsServer = SocketIo(httpServer);
 
+wsServer.on("connection", (socket) => {});
+/* 
+const wss = new WebSocket.Server({ server });
 //fake db
 const sockets = [];
 
@@ -42,6 +45,6 @@ wss.on("connection", (socket) => {
         break;
     }
   });
-});
+}); */
 
-server.listen(PORT, handleListen);
+httpServer.listen(PORT, handleListen);
